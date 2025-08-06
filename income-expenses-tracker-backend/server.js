@@ -7,35 +7,39 @@ const usersRoute = require("./routes/users/usersRoute");
 const globalerrorhandler = require("./middlewares/globalerrorhandler");
 require("./config/dbConnect");
 
-
-
 const app = express();
 
-//middlewares
+// ──────────────────────────────────────
+// ✅ Middleware to allow all cross-origin
+// ──────────────────────────────────────
+app.use(cors({ origin: "*" })); // allows all origins
+app.use(express.json()); // parses incoming JSON
 
-app.use(express.json());  // pass incoming data
-
-// corse middleware
-app.use(cors());
-//users route
+// ──────────────────────────────────────
+// ✅ Routes
+// ──────────────────────────────────────
 app.use("/api/v1/users", usersRoute);
-//account routes
 app.use("/api/v1/accounts", accountRoute);
-
-//transactions route
 app.use("/api/v1/transactions", transactionsRoute);
 
-
-//Error handlers
+// ──────────────────────────────────────
+// ✅ Global Error Handler
+// ──────────────────────────────────────
 app.use(globalerrorhandler);
 
-// const path = require("path");
-// app.get("/", (req, res) => {
-// app.use(express.static(path.resolve(__dirname, "income-expenses-tracker (frontend)", "build")));
-// res.sendFile(path.resolve(__dirname, "income-expenses-tracker (frontend)", "build", "index.html"));
+// ──────────────────────────────────────
+// 🔄 Optional: Serve frontend if deployed together
+// ──────────────────────────────────────
+// const frontendPath = path.join(__dirname, "income-expenses-tracker (frontend)", "build");
+// app.use(express.static(frontendPath));
+// app.get("*", (req, res) => {
+//     res.sendFile(path.join(frontendPath, "index.html"));
 // });
 
-
-//listen to server
+// ──────────────────────────────────────
+// ✅ Start Server
+// ──────────────────────────────────────
 const PORT = process.env.PORT || 8080;
-app.listen(PORT, console.log(`Server is up and runing on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
